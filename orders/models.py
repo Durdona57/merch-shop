@@ -26,7 +26,6 @@ class Order(models.Model):
 class OrderItem(models.Model):
     order = models.ForeignKey(Order, related_name="items", on_delete=models.CASCADE)
     product = models.ForeignKey(Product, on_delete=models.PROTECT)
-    # Snapshots — locked in at purchase time, independent of later Product edits
     product_name = models.CharField(max_length=100)
     price = models.DecimalField(max_digits=8, decimal_places=2)
     quantity = models.PositiveIntegerField(default=1)

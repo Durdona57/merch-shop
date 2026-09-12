@@ -37,8 +37,6 @@ class OrderSerializer(serializers.ModelSerializer):
         items_data = validated_data.pop("items")
 
         with transaction.atomic():
-            # Lock the rows we're about to modify so two simultaneous checkouts
-            # can't both oversell the last item of something.
             product_ids = [i["product_id"] for i in items_data]
             products = {
                 p.id: p

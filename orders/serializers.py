@@ -1,3 +1,4 @@
+from collections import defaultdict
 from decimal import Decimal
 from django.db import transaction
 from rest_framework import serializers
@@ -36,28 +37,33 @@ class OrderSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         items_data = validated_data.pop("items")
 
+        aggregated_quantities: dict[int, int] = defaultdict(int)
+        for item in items_data:
+            aggregated_quantities[item["product_id"]] += item["quantity"]
+
         with transaction.atomic():
-            product_ids = [i["product_id"] for i in items_data]
             products = {
                 p.id: p
-                for p in Product.objects.select_for_update().filter(id__in=product_ids)
+                for p in Product.objects.select_for_update().filter(
+                    id__in=aggregated_quantities.keys()
+                )
             }
 
             order_items = []
             total = Decimal("0.00")
 
-            for item in items_data:
-                product = products.get(item["product_id"])
+            for product_id, quantity in aggregated_quantities.items():
+                product = products.get(product_id)
                 if product is None:
                     raise serializers.ValidationError(
-                        f"Product {item['product_id']} does not exist."
+                        f"Product {product_id} does not exist."
                     )
-                if product.stock < item["quantity"]:
+                if product.stock < quantity:
                     raise serializers.ValidationError(
                         f"'{product.name}' only has {product.stock} left in stock."
                     )
-                total += product.price * item["quantity"]
-                order_items.append((product, item["quantity"]))
+                total += product.price * quantity
+                order_items.append((product, quantity))
 
             order = Order.objects.create(total=total, **validated_data)
 

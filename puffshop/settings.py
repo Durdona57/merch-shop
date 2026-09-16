@@ -24,9 +24,14 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = config('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
+DEBUG = config('DEBUG', default=False, cast=bool)
+
+ALLOWED_HOSTS = config(
+    'ALLOWED_HOSTS',
+    default='127.0.0.1,localhost',
+    cast=lambda v: [h.strip() for h in v.split(',') if h.strip()],
+)
 
 
 # Application definition
@@ -137,6 +142,28 @@ CORS_ALLOWED_ORIGINS = [
     "http://localhost:8443",
     "http://127.0.0.1:8443",
 ]
+
+
+
+REST_FRAMEWORK = {
+    'DEFAULT_THROTTLE_CLASSES': [
+        'rest_framework.throttling.AnonRateThrottle',
+    ],
+    'DEFAULT_THROTTLE_RATES': {
+        'anon': '30/min',
+    },
+}
+
+SECURE_CONTENT_TYPE_NOSNIFF = True   # stops browsers guessing file types
+X_FRAME_OPTIONS = 'DENY'             # stops this site being embedded in an <iframe> elsewhere
+
+if not DEBUG:
+    SECURE_SSL_REDIRECT = True
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
+    SECURE_HSTS_SECONDS = 31536000
+    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+    SECURE_HSTS_PRELOAD = True
 
 
 MEDIA_URL = "/media/"

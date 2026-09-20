@@ -166,6 +166,11 @@ if not DEBUG:
     SECURE_HSTS_INCLUDE_SUBDOMAINS = True
     SECURE_HSTS_PRELOAD = True
 
+CSRF_TRUSTED_ORIGINS = [
+    "https://onrender.com",
+    "https://vercel.app",
+]
+
 
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"

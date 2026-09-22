@@ -27,11 +27,21 @@ SECRET_KEY = config('SECRET_KEY')
 
 DEBUG = config('DEBUG', default=False, cast=bool)
 
-ALLOWED_HOSTS = config(
-    'ALLOWED_HOSTS',
-    default='127.0.0.1,localhost',
-    cast=lambda v: [h.strip() for h in v.split(',') if h.strip()],
-)
+# 1. ALLOWED_HOSTS (Kataktan o'qiydi, agar topilmasa hammasiga ruxsat)
+ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='*', cast=lambda v: [h.strip() for h in v.split(',') if h.strip()])
+
+# 2. CORS Sozlamalari (Frontend backend bilan gaplashishi uchun)
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:8443",
+    "http://127.0.0.1:8443",
+    "https://puff-shop-frontend.vercel.app",  #  jonli frontend sayti
+]
+
+# 3. CSRF Sozlamalari (Admin panel xatosiz ochilishi uchun)
+CSRF_TRUSTED_ORIGINS = [
+    "https://puff-shop-backend-8fpw.onrender.com",
+    "https://puff-shop-frontend.vercel.app",
+]
 
 
 # Application definition
@@ -139,10 +149,6 @@ MAILERS = {
     },
 }
 
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:8443",
-    "http://127.0.0.1:8443",
-]
 
 
 
@@ -166,10 +172,7 @@ if not DEBUG:
     SECURE_HSTS_INCLUDE_SUBDOMAINS = True
     SECURE_HSTS_PRELOAD = True
 
-CSRF_TRUSTED_ORIGINS = [
-    "https://onrender.com",
-    "https://vercel.app",
-]
+
 
 
 MEDIA_URL = "/media/"

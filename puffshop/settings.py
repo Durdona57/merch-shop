@@ -165,12 +165,14 @@ SECURE_CONTENT_TYPE_NOSNIFF = True   # stops browsers guessing file types
 X_FRAME_OPTIONS = 'DENY'             # stops this site being embedded in an <iframe> elsewhere
 
 if not DEBUG:
-    SECURE_SSL_REDIRECT = True
-    SESSION_COOKIE_SECURE = True
-    CSRF_COOKIE_SECURE = True
-    SECURE_HSTS_SECONDS = 31536000
-    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
-    SECURE_HSTS_PRELOAD = True
+    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https') # Bu qator qolsin
+    SECURE_SSL_REDIRECT = False       # False qilindi
+    SESSION_COOKIE_SECURE = True      # Xavfsizlik uchun True qolaversin
+    CSRF_COOKIE_SECURE = True         # Xavfsizlik uchun True qolaversin
+    SECURE_HSTS_SECONDS = 0           # 0 qilib kesh blokirovkasi yechildi
+    SECURE_HSTS_INCLUDE_SUBDOMAINS = False
+    SECURE_HSTS_PRELOAD = False
+
 
 
 

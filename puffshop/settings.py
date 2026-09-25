@@ -167,6 +167,7 @@ X_FRAME_OPTIONS = 'DENY'             # stops this site being embedded in an <ifr
 if not DEBUG:
     SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https') # Bu qator qolsin
     SECURE_SSL_REDIRECT = False       # False qilindi
+    CORS_ALLOW_ALL_ORIGINS = True
     SESSION_COOKIE_SECURE = True      # Xavfsizlik uchun True qolaversin
     CSRF_COOKIE_SECURE = True         # Xavfsizlik uchun True qolaversin
     SECURE_HSTS_SECONDS = 0           # 0 qilib kesh blokirovkasi yechildi

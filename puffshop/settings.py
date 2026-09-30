@@ -58,6 +58,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'corsheaders',
     'contact',
+    'storages',
 ]
 
 MIDDLEWARE = [
@@ -165,9 +166,10 @@ SECURE_CONTENT_TYPE_NOSNIFF = True   # stops browsers guessing file types
 X_FRAME_OPTIONS = 'DENY'             # stops this site being embedded in an <iframe> elsewhere
 
 if not DEBUG:
+    CORS_ALLOW_ALL_ORIGINS = True
+    CORS_ALLOW_CREDENTIALS = True
     SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https') # Bu qator qolsin
     SECURE_SSL_REDIRECT = False       # False qilindi
-    CORS_ALLOW_ALL_ORIGINS = True
     SESSION_COOKIE_SECURE = True      # Xavfsizlik uchun True qolaversin
     CSRF_COOKIE_SECURE = True         # Xavfsizlik uchun True qolaversin
     SECURE_HSTS_SECONDS = 0           # 0 qilib kesh blokirovkasi yechildi
@@ -176,7 +178,20 @@ if not DEBUG:
 
 
 
-
-
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
+
+
+SUPABASE_S3_ENDPOINT = config('SUPABASE_S3_ENDPOINT', default='')
+
+if SUPABASE_S3_ENDPOINT:
+    AWS_ACCESS_KEY_ID = config('SUPABASE_S3_ACCESS_KEY', default='')
+    AWS_SECRET_ACCESS_KEY = config('SUPABASE_S3_SECRET_KEY', default='')
+    AWS_STORAGE_BUCKET_NAME = config('SUPABASE_S3_BUCKET', default='media')
+    AWS_S3_ENDPOINT_URL = SUPABASE_S3_ENDPOINT
+    AWS_S3_REGION_NAME = config('SUPABASE_S3_REGION', default='us-east-1')
+    AWS_S3_ADDRESSING_STYLE = 'path'
+    AWS_DEFAULT_ACL = None
+    AWS_QUERYSTRING_AUTH = False
+    AWS_S3_FILE_OVERWRITE = False
+    DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'

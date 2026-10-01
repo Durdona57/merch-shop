@@ -189,6 +189,7 @@ if SUPABASE_S3_ENDPOINT:
     AWS_SECRET_ACCESS_KEY = config('SUPABASE_S3_SECRET_KEY', default='')
     AWS_STORAGE_BUCKET_NAME = config('SUPABASE_S3_BUCKET', default='media')
     AWS_S3_ENDPOINT_URL = SUPABASE_S3_ENDPOINT
+    AWS_S3_CUSTOM_DOMAIN = f"{config('SUPABASE_S3_ENDPOINT').replace('https://', '')}/object/public/{AWS_STORAGE_BUCKET_NAME}"
     AWS_S3_REGION_NAME = config('SUPABASE_S3_REGION', default='us-east-1')
     AWS_S3_ADDRESSING_STYLE = 'path'
     AWS_DEFAULT_ACL = None

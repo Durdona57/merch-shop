@@ -182,17 +182,22 @@ MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
 
 
+# TEMPORARY — add the print() lines below, remove them once this is solved.
+
 SUPABASE_S3_ENDPOINT = config('SUPABASE_S3_ENDPOINT', default='')
+print(f"[DEBUG] SUPABASE_S3_ENDPOINT = {SUPABASE_S3_ENDPOINT!r}")
 
 if SUPABASE_S3_ENDPOINT:
     AWS_ACCESS_KEY_ID = config('SUPABASE_S3_ACCESS_KEY', default='')
     AWS_SECRET_ACCESS_KEY = config('SUPABASE_S3_SECRET_KEY', default='')
     AWS_STORAGE_BUCKET_NAME = config('SUPABASE_S3_BUCKET', default='media')
     AWS_S3_ENDPOINT_URL = SUPABASE_S3_ENDPOINT
-    AWS_S3_CUSTOM_DOMAIN = f"{config('SUPABASE_S3_ENDPOINT').replace('https://', '')}/object/public/{AWS_STORAGE_BUCKET_NAME}"
     AWS_S3_REGION_NAME = config('SUPABASE_S3_REGION', default='us-east-1')
     AWS_S3_ADDRESSING_STYLE = 'path'
     AWS_DEFAULT_ACL = None
     AWS_QUERYSTRING_AUTH = False
     AWS_S3_FILE_OVERWRITE = False
     DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+    print("[DEBUG] Using Supabase S3 storage")
+else:
+    print("[DEBUG] Using default local filesystem storage — SUPABASE_S3_ENDPOINT was empty!")

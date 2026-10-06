@@ -197,7 +197,15 @@ if SUPABASE_S3_ENDPOINT:
     AWS_DEFAULT_ACL = None
     AWS_QUERYSTRING_AUTH = False
     AWS_S3_FILE_OVERWRITE = False
-    DEFAULT_FILE_STORAGE = 'storage_backends.SupabaseMediaStorage'
-    print("[DEBUG] Using Supabase S3 storage")
+
+    STORAGES = {
+        "default": {
+            "BACKEND": "storage_backends.SupabaseMediaStorage",
+        },
+        "staticfiles": {
+            "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage",
+        },
+    }
+    print("[DEBUG] Using Supabase S3 storage via STORAGES setting")
 else:
     print("[DEBUG] Using default local filesystem storage — SUPABASE_S3_ENDPOINT was empty!")

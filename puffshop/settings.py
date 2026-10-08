@@ -206,6 +206,4 @@ if SUPABASE_S3_ENDPOINT:
             "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage",
         },
     }
-    print("[DEBUG] Using Supabase S3 storage via STORAGES setting")
-else:
-    print("[DEBUG] Using default local filesystem storage — SUPABASE_S3_ENDPOINT was empty!")
+
